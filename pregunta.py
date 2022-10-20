@@ -31,27 +31,27 @@ def ingest_data():
     df.readline(), df.readline()
     doc = df.readlines()
     cont = []
-    texto = ''
+    text = ''
 
     for line in doc:
         line = re.sub(r"\s{2,}", " ", line.strip()).replace('\n', '')
         line += ' '
         if '%' in line:
-            if texto != '':
+            if text != '':
                 aux = cont.pop()
-                texto = texto.replace('.', '').strip()
-                aux[3] = aux[3] + texto
+                text = text.replace('.', '').strip()
+                aux[3] = aux[3] + text
                 cont.append(aux)
-                texto = ''
+                text = ''
             indice = line.index('%')
-            sublista = line[:indice].strip().replace(',', '.').split(" ")
-            cont.append(sublista + [line[indice + 2:]])
+            l = line[:indice].strip().replace(',', '.').split(" ")
+            cont.append(l + [line[indice + 2:]])
         else:
-            texto += line
+            text += line
 
     aux = cont.pop()
-    texto = texto.replace('.', '').strip()
-    aux[3] = aux[3] + texto
+    text = text.replace('.', '').strip()
+    aux[3] = aux[3] + text
     cont.append(aux)
     df = pd.DataFrame(cont, columns=line1)
     df['cluster'] = df['cluster'].astype('int64')
